@@ -1,0 +1,25 @@
+{
+  "name": "paradise-nursery",
+  "version": "1.0.0",
+  "description": "Paradise Nursery is an online plant shop application that allows users to browse and purchase houseplants through an interactive shopping cart interface.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanikajoshi-0605/Paradise-Nursery.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sanikajoshi-0605/Paradise-Nursery/issues"
+  },
+  "homepage": "https://github.com/sanikajoshi-0605/Paradise-Nursery#readme",
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.12.0",
+    "react-redux": "^9.3.0"
+  }
+}
