@@ -1,129 +1,207 @@
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeItem, updateQuantity } from "./CartSlice";
+import {
+  removeItem,
+  updateQuantity,
+} from "./CartSlice";
 
-function CartItem() {
+function CartItem({ onContinueShopping }) {
   const dispatch = useDispatch();
 
-  const cartItems = useSelector((state) => state.cart.items);
+  const cartItems = useSelector(
+    (state) => state.cart.items
+  );
 
+  // Calculate total cart amount
   const totalAmount = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) =>
+      total + item.price * item.quantity,
     0
   );
 
-  const handleIncrease = (item) => {
+  // Increase quantity
+  const handleIncrease = (id, quantity) => {
     dispatch(
       updateQuantity({
-        id: item.id,
-        quantity: item.quantity + 1,
+        id,
+        quantity: quantity + 1,
       })
     );
   };
 
-  const handleDecrease = (item) => {
+  // Decrease quantity
+  const handleDecrease = (id, quantity) => {
     dispatch(
       updateQuantity({
-        id: item.id,
-        quantity: item.quantity - 1,
+        id,
+        quantity: quantity - 1,
       })
     );
   };
 
-  const handleDelete = (id) => {
+  // Remove item
+  const handleRemove = (id) => {
     dispatch(removeItem(id));
   };
 
+  // Checkout
   const handleCheckout = () => {
-    alert("Checkout Coming Soon!");
+    alert(
+      "Thank you for shopping with Paradise Nursery! Checkout is coming soon."
+    );
   };
 
   return (
     <div className="cart-page">
+
+      {/* Navigation */}
       <nav className="navbar">
-        <h2>Paradise Nursery</h2>
+        <h2>🌿 Paradise Nursery</h2>
 
         <div className="nav-links">
-          <a href="/">Home</a>
-          <a href="/plants">Plants</a>
-          <a href="/cart">🛒 Cart</a>
+          <button onClick={onContinueShopping}>
+            Continue Shopping
+          </button>
         </div>
       </nav>
 
+      {/* Cart */}
       <main className="cart-container">
+
         <h1>Shopping Cart</h1>
 
         {cartItems.length === 0 ? (
           <div className="empty-cart">
             <h2>Your cart is empty</h2>
 
-            <a href="/plants" className="continue-shopping">
+            <p>
+              Add some beautiful plants to your cart!
+            </p>
+
+            <button
+              className="continue-shopping"
+              onClick={onContinueShopping}
+            >
               Continue Shopping
-            </a>
+            </button>
           </div>
         ) : (
           <>
-            {cartItems.map((item) => (
-              <div className="cart-item" key={item.id}>
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="cart-image"
-                />
+            {/* Cart Items */}
+            <div className="cart-items">
 
-                <div className="cart-details">
-                  <h2>{item.name}</h2>
+              {cartItems.map((item) => (
 
-                  <p>Unit Price: ₹{item.price}</p>
+                <div
+                  className="cart-item"
+                  key={item.id}
+                >
 
-                  <p>
-                    Total Cost: ₹{item.price * item.quantity}
-                  </p>
+                  {/* Product Image */}
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="cart-item-image"
+                  />
 
+                  {/* Product Information */}
+                  <div className="cart-item-details">
+
+                    <h2>{item.name}</h2>
+
+                    <p>
+                      Unit Price: ₹{item.price}
+                    </p>
+
+                    <p>
+                      Quantity: {item.quantity}
+                    </p>
+
+                    <p className="item-total">
+                      Total: ₹
+                      {item.price * item.quantity}
+                    </p>
+
+                  </div>
+
+                  {/* Quantity Controls */}
                   <div className="quantity-controls">
+
                     <button
-                      onClick={() => handleDecrease(item)}
+                      className="decrement"
+                      onClick={() =>
+                        handleDecrease(
+                          item.id,
+                          item.quantity
+                        )
+                      }
                     >
                       −
                     </button>
 
-                    <span>{item.quantity}</span>
+                    <span>
+                      {item.quantity}
+                    </span>
 
                     <button
-                      onClick={() => handleIncrease(item)}
+                      className="increment"
+                      onClick={() =>
+                        handleIncrease(
+                          item.id,
+                          item.quantity
+                        )
+                      }
                     >
                       +
                     </button>
+
                   </div>
 
+                  {/* Delete */}
                   <button
-                    className="delete-button"
-                    onClick={() => handleDelete(item.id)}
+                    className="delete"
+                    onClick={() =>
+                      handleRemove(item.id)
+                    }
                   >
                     Delete
                   </button>
+
                 </div>
-              </div>
-            ))}
 
+              ))}
+
+            </div>
+
+            {/* Cart Summary */}
             <div className="cart-summary">
-              <h2>Total Cart Amount: ₹{totalAmount}</h2>
 
-              <button
-                className="checkout-button"
-                onClick={handleCheckout}
-              >
-                Checkout
-              </button>
+              <h2>
+                Total Amount: ₹{totalAmount}
+              </h2>
 
-              <a
-                href="/plants"
-                className="continue-shopping"
-              >
-                Continue Shopping
-              </a>
+              <div className="cart-actions">
+
+                <button
+                  className="continue-shopping"
+                  onClick={onContinueShopping}
+                >
+                  Continue Shopping
+                </button>
+
+                <button
+                  className="checkout"
+                  onClick={handleCheckout}
+                >
+                  Checkout
+                </button>
+
+              </div>
+
             </div>
           </>
         )}
+
       </main>
     </div>
   );
